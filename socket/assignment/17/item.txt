@@ -1,0 +1,5 @@
+1   Paneer          Rs.25/100gms     50
+2   Washing_Powder  Rs.20/packet     20
+3   Pen             Rs.5/peice       10
+4   Mobile          Rs.500/peice     10
+5   Laptop          Rs.50000/peice   10
