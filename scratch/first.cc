@@ -47,7 +47,7 @@ int main () {
   ApplicationContainer clientApps = client.Install(nodes.Get(0));
   clientApps.Start(Seconds(2.0));
   clientApps.Stop(Seconds(9.0));
-
+   Ipv4GlobalRoutingHelper::PopulateRoutingTables ();
   AnimationInterface anim("first.xml");
   Simulator::Run();
   Simulator::Destroy();
