@@ -5,6 +5,7 @@
 #include "ns3/point-to-point-module.h"
 #include "ns3/applications-module.h"
 #include "ns3/netanim-module.h"
+#include "ns3/mobility-module.h"
 
 using namespace ns3;
 
@@ -32,6 +33,17 @@ int main () {
   ipv4.SetBase("10.1.1.0", "255.255.255.0");
 
   Ipv4InterfaceContainer interface = ipv4.Assign(device);
+    MobilityHelper mobility;
+//---------------------------set mobility ------------------------------------
+  /* mobility.SetPositionAllocator ("ns3::RandomDiscPositionAllocator",
+                                   "X", StringValue ("10.0"),
+                                   "Y", StringValue ("10.0"),
+                                   "Rho", StringValue ("ns3::UniformRandomVariable[Min=0|Max=30]"));
+
+  mobility.SetMobilityModel ("ns3::RandomWalk2dMobilityModel",
+    "Bounds", RectangleValue (Rectangle (-50, 50, -50, 50)));
+
+  mobility.Install (n); */
 
   UdpEchoServerHelper server(10);
 
