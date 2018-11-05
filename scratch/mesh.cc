@@ -31,9 +31,9 @@ int main (int argc, char *argv[])
   NetDeviceContainer devices4;
   devices4 = pointToPoint.Install (nodes.Get(3),nodes.Get(0));
 	NetDeviceContainer devices5;
-  devices3 = pointToPoint.Install (nodes.Get(0),nodes.Get(2));
+  devices5 = pointToPoint.Install (nodes.Get(0),nodes.Get(2));
   NetDeviceContainer devices6;
-  devices4 = pointToPoint.Install (nodes.Get(1),nodes.Get(3));
+  devices6 = pointToPoint.Install (nodes.Get(1),nodes.Get(3));
 
   InternetStackHelper stack;
   stack.Install (nodes);
