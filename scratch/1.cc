@@ -33,18 +33,6 @@ int main () {
   ipv4.SetBase("10.1.1.0", "255.255.255.0");
 
   Ipv4InterfaceContainer interface = ipv4.Assign(device);
-    MobilityHelper mobility;
-//---------------------------set mobility ------------------------------------
-  /* mobility.SetPositionAllocator ("ns3::RandomDiscPositionAllocator",
-                                   "X", StringValue ("10.0"),
-                                   "Y", StringValue ("10.0"),
-                                   "Rho", StringValue ("ns3::UniformRandomVariable[Min=0|Max=30]"));
-
-  mobility.SetMobilityModel ("ns3::RandomWalk2dMobilityModel",
-    "Bounds", RectangleValue (Rectangle (-50, 50, -50, 50)));
-
-  mobility.Install (n); */
-
   UdpEchoServerHelper server(10);
 
   ApplicationContainer serverApps = server.Install(nodes.Get(1));
