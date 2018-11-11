@@ -1,107 +1,173 @@
-/*
-          n2 n3 n4
-           \ | /
-            \|/
-       n1---n0---n5
-            /| \
-           / | \
-          n8 n7 n6
-*/
-
-#include <iostream>
-#include <fstream>
-#include <string>
-#include <cassert>
 
 #include "ns3/core-module.h"
 #include "ns3/network-module.h"
 #include "ns3/internet-module.h"
-#include "ns3/point-to-point-module.h"
+#include "ns3/config-store-module.h"
 #include "ns3/applications-module.h"
-#include "ns3/ipv4-global-routing-helper.h"
+#include "ns3/mobility-module.h"
+#include "ns3/wifi-module.h"
+#include "ns3/flow-monitor-module.h"
+#include "ns3/mesh-module.h"
+#include "ns3/mesh-helper.h"
+#include "ns3/propagation-loss-model.h"
+#include "ns3/csma-module.h"
+#include "ns3/point-to-point-module.h"
 #include "ns3/netanim-module.h"
+
+#include "mesh-tcp.h"
+
+#include <iostream>
+#include <sstream>
+#include <fstream>
+#include <string>
+#include <sstream>
 
 using namespace ns3;
 
-NS_LOG_COMPONENT_DEFINE ("TcpServer");
+void createTcpSocket(NodeContainer c, Ipv4InterfaceContainer ifcont, int sink, int source, int sinkPort, double startTime, double stopTime, uint32_t packetSize, uint32_t numPackets, std::string dataRate)
+{
 
-int main (int argc, char *argv[]){
+	Address sinkAddress1(InetSocketAddress(ifcont.GetAddress(sink), sinkPort));
+	PacketSinkHelper packetSinkHelper1("ns3::TcpSocketFactory", InetSocketAddress(Ipv4Address::GetAny(), sinkPort));
+	ApplicationContainer sinkApps1 = packetSinkHelper1.Install(c.Get(sink));
+	sinkApps1.Start(Seconds(0.));
+	sinkApps1.Stop(Seconds(stopTime));
 
-  Config::SetDefault ("ns3::OnOffApplication::PacketSize", UintegerValue (250));
-  Config::SetDefault ("ns3::OnOffApplication::DataRate", StringValue ("5kb/s"));
-  uint32_t N = 9;
-
-  CommandLine cmd;
-  cmd.AddValue ("nNodes", "Number of nodes to place in the star", N);
-  cmd.Parse (argc, argv);
-
-  NS_LOG_INFO ("Create nodes.");
-  NodeContainer serverNode;
-  NodeContainer clientNodes;
-  serverNode.Create (1);
-  clientNodes.Create (N-1);
-  NodeContainer allNodes = NodeContainer (serverNode, clientNodes);
-
-  InternetStackHelper internet;
-  internet.Install (allNodes);
-
-  std::vector<NodeContainer> nodeAdjacencyList (N-1);
-  for(uint32_t i=0; i<nodeAdjacencyList.size (); ++i){
-      nodeAdjacencyList[i] = NodeContainer (serverNode, clientNodes.Get (i));
-  }
-
-  NS_LOG_INFO ("Create channels.");
-  PointToPointHelper p2p;
-  p2p.SetDeviceAttribute ("DataRate", StringValue ("5Mbps"));
-  p2p.SetChannelAttribute ("Delay", StringValue ("2ms"));
-
-  std::vector<NetDeviceContainer> deviceAdjacencyList (N-1);
-  for(uint32_t i=0; i<deviceAdjacencyList.size (); ++i){
-      deviceAdjacencyList[i] = p2p.Install (nodeAdjacencyList[i]);
-  }
-
-  NS_LOG_INFO ("Assign IP Addresses.");
-  Ipv4AddressHelper ipv4;
-  std::vector<Ipv4InterfaceContainer> interfaceAdjacencyList(N-1);
-  for(uint32_t i=0;i<interfaceAdjacencyList.size();++i){
-      std::ostringstream subnet;
-      subnet<<"10.1."<<i+1<<".0";
-      ipv4.SetBase (subnet.str ().c_str (), "255.255.255.0");
-      interfaceAdjacencyList[i] = ipv4.Assign (deviceAdjacencyList[i]);
+	Ptr<Socket> ns3TcpSocket1 = Socket::CreateSocket(c.Get(source), TcpSocketFactory::GetTypeId());
+	Ptr<MyApp> app1 = CreateObject<MyApp>();
+	app1->Setup(ns3TcpSocket1, sinkAddress1, packetSize, numPackets, DataRate(dataRate));
+	c.Get(source)->AddApplication(app1);
+	app1->SetStartTime(Seconds(startTime));
+	app1->SetStopTime(Seconds(stopTime));
 }
 
-  Ipv4GlobalRoutingHelper::PopulateRoutingTables ();
-  uint16_t port = 50000;
-  Address sinkLocalAddress (InetSocketAddress (Ipv4Address::GetAny (), port));
-  PacketSinkHelper sinkHelper ("ns3::TcpSocketFactory", sinkLocalAddress);
-  ApplicationContainer sinkApp = sinkHelper.Install (serverNode);
-  sinkApp.Start (Seconds (1.0));
-  sinkApp.Stop (Seconds (10.0));
+void createUdpSocket(NodeContainer c, Ipv4InterfaceContainer ifcont, int sink, int source, int sinkPort, double startTime, double stopTime, uint32_t packetSize, uint32_t numPackets, std::string dataRate)
+{
 
-  OnOffHelper clientHelper ("ns3::TcpSocketFactory", Address ());
-  clientHelper.SetAttribute ("OnTime", StringValue ("ns3::ConstantRandomVariable[Constant=1]"));
-  clientHelper.SetAttribute ("OffTime", StringValue ("ns3::ConstantRandomVariable[Constant=0]"));
+	Address sinkAddress1(InetSocketAddress(ifcont.GetAddress(sink), sinkPort));
+	PacketSinkHelper packetSinkHelper1("ns3::UdpSocketFactory", InetSocketAddress(Ipv4Address::GetAny(), sinkPort));
+	ApplicationContainer sinkApps1 = packetSinkHelper1.Install(c.Get(sink));
+	sinkApps1.Start(Seconds(0.));
+	sinkApps1.Stop(Seconds(stopTime));
 
-  ApplicationContainer clientApps;
-  for(uint32_t i=0; i<clientNodes.GetN (); ++i){
-      AddressValue remoteAddress
-        (InetSocketAddress (interfaceAdjacencyList[i].GetAddress (0), port));
-      clientHelper.SetAttribute ("Remote", remoteAddress);
-      clientApps.Add (clientHelper.Install (clientNodes.Get (i)));
-  }
-  clientApps.Start (Seconds (1.0));
-  clientApps.Stop (Seconds (10.0));
+	Ptr<Socket> ns3UdpSocket1 = Socket::CreateSocket(c.Get(source), UdpSocketFactory::GetTypeId());
+	Ptr<MyApp> app1 = CreateObject<MyApp>();
+	app1->Setup(ns3UdpSocket1, sinkAddress1, packetSize, numPackets, DataRate(dataRate));
+	c.Get(source)->AddApplication(app1);
+	app1->SetStartTime(Seconds(startTime));
+	app1->SetStopTime(Seconds(stopTime));
+}
 
-  AsciiTraceHelper ascii;
-  p2p.EnableAsciiAll (ascii.CreateFileStream ("tcp-star-server.tr"));
-  p2p.EnablePcapAll ("tcp-star-server");
+void setPhy(YansWifiPhyHelper &wifiPhy)
+{
+	wifiPhy.Set("TxPowerStart", DoubleValue(1000.0));
+	wifiPhy.Set("TxPowerEnd", DoubleValue(1000.0));
+	wifiPhy.Set("TxPowerLevels", UintegerValue(1000));
+	wifiPhy.Set("TxGain", DoubleValue(1000.0));
+	wifiPhy.Set("RxGain", DoubleValue(1000.0));
+	wifiPhy.Set("EnergyDetectionThreshold", DoubleValue(-60));
+	wifiPhy.Set("CcaMode1Threshold", DoubleValue(-65));
+}
 
-  AnimationInterface anim("tcp-star.xml");
+int main(int argc, char *argv[])
+{
+	uint32_t packetSize = 1024;
 
-  NS_LOG_INFO ("Run Simulation.");
-  Simulator::Run ();
-  Simulator::Destroy ();
-  NS_LOG_INFO ("Done.");
+	ns3::PacketMetadata::Enable();
 
-  return 0;
+	NodeContainer genMesh;
+	NetDeviceContainer genMeshDevice;
+
+	genMesh.Create(6);
+
+	YansWifiPhyHelper wifiPhy = YansWifiPhyHelper::Default();
+	wifiPhy.SetPcapDataLinkType(YansWifiPhyHelper::DLT_IEEE802_11);
+	setPhy(wifiPhy);
+
+	YansWifiChannelHelper wifiChannel = YansWifiChannelHelper::Default();
+	wifiChannel.SetPropagationDelay("ns3::ConstantSpeedPropagationDelayModel");
+	wifiChannel.AddPropagationLoss("ns3::FixedRssLossModel");
+
+	wifiPhy.SetChannel(wifiChannel.Create());
+
+	Config::SetDefault("ns3::dot11s::PeerLink::MaxBeaconLoss", UintegerValue(2));
+	Config::SetDefault("ns3::dot11s::PeerLink::MaxRetries", UintegerValue(4));
+	Config::SetDefault("ns3::dot11s::PeerLink::MaxPacketFailure", UintegerValue(1));
+
+	Config::SetDefault("ns3::dot11s::PeerManagementProtocol::EnableBeaconCollisionAvoidance", BooleanValue(true));
+
+	Config::SetDefault("ns3::dot11s::HwmpProtocol::Dot11MeshHWMPactivePathTimeout", TimeValue(Seconds(100)));
+	Config::SetDefault("ns3::dot11s::HwmpProtocol::Dot11MeshHWMPactiveRootTimeout", TimeValue(Seconds(100)));
+	Config::SetDefault("ns3::dot11s::HwmpProtocol::Dot11MeshHWMPmaxPREQretries", UintegerValue(5));
+	Config::SetDefault("ns3::dot11s::HwmpProtocol::UnicastPreqThreshold", UintegerValue(10));
+	Config::SetDefault("ns3::dot11s::HwmpProtocol::UnicastDataThreshold", UintegerValue(5));
+	Config::SetDefault("ns3::dot11s::HwmpProtocol::DoFlag", BooleanValue(true));
+	Config::SetDefault("ns3::dot11s::HwmpProtocol::RfFlag", BooleanValue(false));
+
+	std::string m_stack = "ns3::Dot11sStack";
+	std::string m_root = "ff:ff:ff:ff:ff:ff";
+	MeshHelper mesh;
+	mesh = MeshHelper::Default();
+	if (!Mac48Address(m_root.c_str()).IsBroadcast())
+	{
+		mesh.SetStackInstaller(m_stack, "Root", Mac48AddressValue(Mac48Address(m_root.c_str())));
+	}
+	else
+	{
+		mesh.SetStackInstaller(m_stack);
+	}
+	mesh.SetSpreadInterfaceChannels(MeshHelper::SPREAD_CHANNELS);
+	mesh.SetNumberOfInterfaces(1);
+	mesh.SetMacType("RandomStart", TimeValue(Seconds(0.1)));
+
+	NetDeviceContainer meshDevice;
+	genMeshDevice = mesh.Install(wifiPhy, genMesh);
+
+	MobilityHelper mobility;
+	mobility.SetPositionAllocator("ns3::GridPositionAllocator",
+																"MinX", DoubleValue(0.0),
+																"MinY", DoubleValue(0.0),
+																"DeltaX", DoubleValue(50.0),
+																"DeltaY", DoubleValue(50.0),
+																"GridWidth", UintegerValue(3),
+																"LayoutType", StringValue("RowFirst"));
+	mobility.Install(genMesh);
+
+	AnimationInterface animation("mesh-tcp.xml");
+
+	animation.EnablePacketMetadata(false);
+
+	InternetStackHelper stack;
+	stack.Install(genMesh);
+
+	Ipv4AddressHelper address;
+
+	address.SetBase("10.1.1.0", "255.255.255.0");
+	Ipv4InterfaceContainer genInterfaces;
+	genInterfaces = address.Assign(genMeshDevice);
+
+	createTcpSocket(genMesh, genInterfaces, 1, 0, 8080, 1.0, 100.0, packetSize, 1000, "250Kbps");
+
+	FlowMonitorHelper flowmon;
+	Ptr<FlowMonitor> monitor = flowmon.InstallAll();
+
+	Simulator::Stop(Seconds(100.0));
+	Simulator::Run();
+
+	monitor->CheckForLostPackets();
+	Ptr<Ipv4FlowClassifier> classifier = DynamicCast<Ipv4FlowClassifier>(flowmon.GetClassifier());
+	std::map<FlowId, FlowMonitor::FlowStats> stats = monitor->GetFlowStats();
+
+	for (std::map<FlowId, FlowMonitor::FlowStats>::const_iterator iter = stats.begin(); iter != stats.end(); ++iter)
+	{
+		Ipv4FlowClassifier::FiveTuple t = classifier->FindFlow(iter->first);
+
+		NS_LOG_UNCOND("Flow ID: " << iter->first << " Src Addr " << t.sourceAddress << " Dst Addr " << t.destinationAddress);
+		NS_LOG_UNCOND("Tx Packets = " << iter->second.txPackets);
+		NS_LOG_UNCOND("Rx Packets = " << iter->second.rxPackets);
+		NS_LOG_UNCOND("Throughput: " << iter->second.rxBytes * 8.0 / (iter->second.timeLastRxPacket.GetSeconds() - iter->second.timeFirstTxPacket.GetSeconds()) / packetSize << " Kbps");
+	}
+
+	Simulator::Destroy();
+	return 0;
 }
