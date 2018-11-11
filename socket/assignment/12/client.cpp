@@ -7,6 +7,11 @@
 #include <unistd.h>
 using namespace std;
 
+/*
+    $ g++ client.cpp -o client
+    $ ./client
+*/
+
 int main()
 {
   int sock;

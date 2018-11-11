@@ -8,6 +8,10 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 
+/*
+    $ g++ server.c -o server
+    $ ./server
+*/
 struct student
 {
   int roll;

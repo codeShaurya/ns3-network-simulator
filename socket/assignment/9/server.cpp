@@ -7,6 +7,11 @@
 #include <unistd.h>
 using namespace std;
 
+/*
+    $ g++ server.cpp -o server
+    $ ./server
+*/
+
 int main()
 {
   int ssock, csock;

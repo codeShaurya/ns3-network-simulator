@@ -6,8 +6,12 @@
 #include <string.h>
 #include <arpa/inet.h>
 #include <unistd.h>
-
 using namespace std;
+
+/*
+    $ g++ server.cpp -o server
+    $ ./server
+*/
 
 int main()
 {

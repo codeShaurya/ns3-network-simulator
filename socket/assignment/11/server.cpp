@@ -6,6 +6,10 @@
 #include <unistd.h>
 using namespace std;
 
+/*
+    $ g++ server.cpp -o server
+    $ ./server
+*/
 struct dic
 {
   char w[100];

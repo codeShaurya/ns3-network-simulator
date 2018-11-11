@@ -9,6 +9,11 @@
 #include <unistd.h>
 #include <string.h>
 
+/*
+    $ g++ client.c -o client
+    $./client
+*/
+
 int main(int argc, char *argv[])
 {
   int sock;

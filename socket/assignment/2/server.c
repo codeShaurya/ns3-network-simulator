@@ -8,6 +8,11 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 
+/*
+    $ g++ server.c -o server
+    $ ./server
+*/
+
 int fact(int n)
 {
   if (n < 1)

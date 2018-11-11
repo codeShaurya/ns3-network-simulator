@@ -8,6 +8,11 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 
+/*
+    $ g++ client.c -o client
+    $ ./client
+*/
+
 int main()
 {
   int sock;

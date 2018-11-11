@@ -9,6 +9,10 @@
 #include <unistd.h>
 #include <string.h>
 
+/*
+    $ g++ client.c -o client
+    $ ./client
+*/
 struct student
 {
   int roll;

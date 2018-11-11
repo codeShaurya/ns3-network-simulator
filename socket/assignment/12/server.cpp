@@ -7,6 +7,11 @@
 #include <unistd.h>
 using namespace std;
 
+/*
+    $ g++ server.cpp -o server
+    $ ./server
+*/
+
 bool strcomp(char a[], string s)
 {
   int l = s.length();

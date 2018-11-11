@@ -8,6 +8,11 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 
+/*
+    $ g++ server.c -o server
+    $ ./server
+*/
+
 char Grade(int n)
 {
   if (n >= 85)
