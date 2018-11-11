@@ -1,3 +1,7 @@
+/*
+    $ g++ server.c -o server
+    $ ./server
+*/
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/types.h>
@@ -8,10 +12,6 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 
-/*
-    $ g++ server.c -o server
-    $ ./server
-*/
 struct student
 {
   int roll;

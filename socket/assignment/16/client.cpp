@@ -1,3 +1,7 @@
+/*
+    $ g++ client.cpp -o client
+    $ ./client
+*/
 #include <bits/stdc++.h>
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -8,11 +12,6 @@
 #include <unistd.h>
 #include <string.h>
 using namespace std;
-
-/*
-    $ g++ client.cpp -o client
-    $ ./client
-*/
 
 int main()
 {

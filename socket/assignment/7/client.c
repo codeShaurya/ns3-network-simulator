@@ -1,3 +1,7 @@
+/*
+    $ g++ client.c -o client
+    $ ./client
+*/
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/types.h>
@@ -7,11 +11,6 @@
 #include <string.h>
 #include <arpa/inet.h>
 #include <unistd.h>
-
-/*
-    $ g++ client.c -o client
-    $ ./client
-*/
 
 int main()
 {

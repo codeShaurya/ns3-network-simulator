@@ -1,3 +1,7 @@
+/*
+    $ g++ client.c -o client
+    $ ./client
+*/
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/types.h>
@@ -9,10 +13,6 @@
 #include <unistd.h>
 #include <string.h>
 
-/*
-    $ g++ client.c -o client
-    $ ./client
-*/
 struct student
 {
   int roll;

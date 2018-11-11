@@ -1,3 +1,8 @@
+/*
+    $ g++ client.cpp -o server
+    $ ./client
+*/
+
 #include <bits/stdc++.h>
 #include <sys/types.h>
 #include <sys/socket.h>

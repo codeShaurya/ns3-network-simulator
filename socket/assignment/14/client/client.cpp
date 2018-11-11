@@ -1,12 +1,3 @@
-#include <bits/stdc++.h>
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <unistd.h>
-#include <errno.h>
-
-using namespace std;
-
 /*
   Command line arguement :
         1. INADDR_ANY
@@ -16,6 +7,15 @@ using namespace std;
   Ex.
   $ ./a.out INADDR_ANY 10000 get file.txt
 */
+
+#include <bits/stdc++.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <unistd.h>
+#include <errno.h>
+
+using namespace std;
 
 int main(int argc, char *argv[])
 {

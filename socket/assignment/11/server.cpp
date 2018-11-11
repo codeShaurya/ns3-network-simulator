@@ -1,3 +1,7 @@
+/*
+    $ g++ server.cpp -o server
+    $ ./server
+*/
 #include <bits/stdc++.h>
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -6,10 +10,6 @@
 #include <unistd.h>
 using namespace std;
 
-/*
-    $ g++ server.cpp -o server
-    $ ./server
-*/
 struct dic
 {
   char w[100];

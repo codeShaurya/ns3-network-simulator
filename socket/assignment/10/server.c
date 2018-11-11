@@ -1,3 +1,7 @@
+/*
+    $ g++ server.c -o server
+    $ ./server
+*/
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/types.h>
@@ -7,11 +11,6 @@
 #include <string.h>
 #include <arpa/inet.h>
 #include <unistd.h>
-
-/*
-    $ g++ server.c -o server
-    $ ./server
-*/
 
 int empl[6][3];
 void in()

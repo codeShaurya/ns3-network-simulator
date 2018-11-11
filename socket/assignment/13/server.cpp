@@ -1,3 +1,8 @@
+/*
+    $ g++ server.cpp -o server
+    $ ./server
+*/
+
 #include <bits/stdc++.h>
 #include <sys/types.h>
 #include <sys/socket.h>

@@ -1,10 +1,3 @@
-#include <bits/stdc++.h>
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <errno.h>
-#include <netinet/in.h>
-#include <unistd.h>
-using namespace std;
 
 /*
   Command line arguement :
@@ -12,6 +5,13 @@ using namespace std;
   Ex.
   $ ./a.out 10000
 */
+#include <bits/stdc++.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <errno.h>
+#include <netinet/in.h>
+#include <unistd.h>
+using namespace std;
 
 int main(int argc, char *argv[])
 {
