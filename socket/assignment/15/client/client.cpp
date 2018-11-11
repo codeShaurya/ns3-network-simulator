@@ -4,8 +4,17 @@
 #include <netinet/in.h>
 #include <unistd.h>
 #include <errno.h>
-
 using namespace std;
+
+/*
+  Command line arguement :
+        1. INADDR_ANY
+        2. port
+        3. put
+        4. filename
+  Ex.
+  $ ./a.out INADDR_ANY 10000 put file.txt
+*/
 
 int main(int argc, char *argv[])
 {

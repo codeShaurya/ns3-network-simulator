@@ -1,0 +1,8 @@
+What is your name?
+Shubham Maurya
+Where do you study?
+IIT(ISM) Dhnabad
+What is red?
+Color
+What is Earth?
+Trap

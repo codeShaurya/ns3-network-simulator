@@ -4,8 +4,14 @@
 #include <errno.h>
 #include <netinet/in.h>
 #include <unistd.h>
-
 using namespace std;
+
+/*
+  Command line arguement :
+        1. port number
+  Ex.
+  $ ./a.out 10000
+*/
 
 int main(int argc, char *argv[])
 {
