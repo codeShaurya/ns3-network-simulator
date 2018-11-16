@@ -18,8 +18,8 @@ int main(int argc, char *argv[])
   int sock;
   int i, n = -1;
   unsigned int len;
-  int item_id = atoi(argv[3]);
-  int q = atoi(argv[4]);
+  int item_id = atoi(argv[1]);
+  int q = atoi(argv[2]);
 
   struct sockaddr_in client;
   if ((sock = socket(AF_INET, SOCK_STREAM, 0)) == -1)
@@ -29,8 +29,8 @@ int main(int argc, char *argv[])
   }
 
   client.sin_family = AF_INET;
-  client.sin_port = htons(atoi(argv[2]));
-  client.sin_addr.s_addr = atoi(argv[1]);
+  client.sin_port = htons(10000);
+  client.sin_addr.s_addr = INADDR_ANY;
   bzero(&client.sin_zero, 0);
 
   len = sizeof(struct sockaddr_in);
